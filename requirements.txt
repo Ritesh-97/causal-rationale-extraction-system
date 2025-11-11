@@ -1,0 +1,46 @@
+# Core dependencies
+# Note: Python 3.9+ required (checked by system, not installed via pip)
+
+# Data processing
+pandas>=2.2.0
+numpy>=1.26.0
+
+# LLM and embeddings
+openai==1.3.0
+anthropic==0.7.0
+google-generativeai==0.3.2
+sentence-transformers>=2.2.2
+transformers>=4.35.0
+torch>=2.5.0
+
+# Vector database and retrieval
+chromadb>=0.4.15
+faiss-cpu>=1.9.0
+langchain>=0.0.350
+langchain-community>=0.0.10
+langchain-openai>=0.0.2
+
+# Reranking
+rank-bm25==0.2.2
+
+# Web framework for API
+fastapi==0.104.1
+uvicorn==0.24.0
+pydantic==2.5.0
+
+# Utilities
+python-dotenv==1.0.0
+tqdm==4.66.1
+pyyaml==6.0.1
+
+# Evaluation
+scikit-learn==1.3.2
+
+# Documentation
+sphinx==7.2.6
+
+# Development
+pytest==7.4.3
+black==23.11.0
+flake8==6.1.0
+

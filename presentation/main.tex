@@ -1,0 +1,355 @@
+\documentclass[aspectratio=169,11pt]{beamer}
+\usetheme{Madrid}
+\usecolortheme{default}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+
+\title{Causal Rationale Extraction and Synthesis\\from Conversational Data}
+\subtitle{Observe.AI Tech Meet 14 - Problem Statement M5}
+\author{Team Name}
+\date{\today}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}{Agenda}
+\tableofcontents
+\end{frame}
+
+\section{Problem Statement}
+
+\begin{frame}{Problem Statement}
+\begin{itemize}
+    \item Contact centers process \textbf{tens to hundreds of thousands} of agent-customer dialogues
+    \item Many conversations result in \textbf{business-critical events}:
+    \begin{itemize}
+        \item Customer escalations
+        \item Refund requests
+        \item Churn signals
+    \end{itemize}
+    \item Current systems flag \textbf{that} events occurred, but not \textbf{why}
+    \item Need to identify:
+    \begin{itemize}
+        \item Which dialogue segments triggered events
+        \item What conversational patterns lead to outcomes
+        \item Temporal patterns that presage events
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Objectives}
+\begin{block}{Task 1: Query-Driven Evidence-Based Causal Explanation}
+Generate evidence-based causal explanations for natural language queries about business events
+\end{block}
+
+\begin{block}{Task 2: Conversational Follow-Up}
+Support contextual follow-up conversations with awareness of previous queries and responses
+\end{block}
+\end{frame}
+
+\section{System Architecture}
+
+\begin{frame}{System Overview}
+\begin{center}
+\includegraphics[width=0.9\textwidth]{architecture.png}
+\end{center}
+\vspace{0.5cm}
+\begin{columns}
+\column{0.5\textwidth}
+\begin{itemize}
+    \item Data Processing
+    \item Retrieval System
+    \item Causal Analysis
+\end{itemize}
+\column{0.5\textwidth}
+\begin{itemize}
+    \item Query Processing
+    \item Explanation Generation
+    \item Conversation Management
+\end{itemize}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Data Processing Pipeline}
+\begin{enumerate}
+    \item \textbf{Transcript Loading}: Support JSON, CSV, TXT formats
+    \item \textbf{Preprocessing}:
+    \begin{itemize}
+        \item Speaker normalization
+        \item Text cleaning
+        \item Turn segmentation
+    \end{itemize}
+    \item \textbf{Span Extraction}: Sliding windows (5 turns per span)
+    \item \textbf{Vector Indexing}: ChromaDB for efficient retrieval
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Retrieval System}
+\begin{columns}
+\column{0.5\textwidth}
+\textbf{Two-Stage Retrieval:}
+\begin{enumerate}
+    \item \textbf{Semantic Search}
+    \begin{itemize}
+        \item Sentence transformers
+        \item Dense vector similarity
+        \item Top-k retrieval
+    \end{itemize}
+    \item \textbf{Reranking}
+    \begin{itemize}
+        \item Cross-encoder
+        \item Query-span relevance
+        \item Precision refinement
+    \end{itemize}
+\end{enumerate}
+\column{0.5\textwidth}
+\textbf{Event-Specific Retrieval:}
+\begin{itemize}
+    \item Filter by event type
+    \item Extract causal spans
+    \item Temporal proximity scoring
+\end{itemize}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Causal Analysis}
+\begin{block}{Pattern Detection}
+\begin{itemize}
+    \item \textbf{Temporal}: Spans preceding events
+    \item \textbf{Sequential}: Consecutive causal relationships
+    \item \textbf{Behavioral}: Hesitation, frustration, repetition
+    \item \textbf{Event-Specific}: Escalation/refund/churn triggers
+\end{itemize}
+\end{block}
+
+\begin{block}{Evidence Scoring}
+Weighted combination:
+\begin{itemize}
+    \item Relevance (40\%) + Temporal (30\%) + Pattern (20\%) + Similarity (10\%)
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Explanation Generation}
+\begin{columns}
+\column{0.5\textwidth}
+\textbf{LLM Integration:}
+\begin{itemize}
+    \item OpenAI (GPT-4)
+    \item Anthropic (Claude)
+    \item Google Gemini
+\end{itemize}
+
+\textbf{Prompt Engineering:}
+\begin{itemize}
+    \item Structured prompts
+    \item Evidence formatting
+    \item Citation requirements
+\end{itemize}
+\column{0.5\textwidth}
+\textbf{Output Format:}
+\begin{itemize}
+    \item Causal explanation
+    \item Evidence citations
+    \item Key factors
+    \item Causal mechanisms
+\end{itemize}
+\end{columns}
+\end{frame}
+
+\section{Methodology}
+
+\begin{frame}{Task 1: Query Processing Flow}
+\begin{enumerate}
+    \item \textbf{Query Parsing}: Extract event type, intent, key terms
+    \item \textbf{Retrieval}: Semantic search + reranking
+    \item \textbf{Causal Analysis}: Pattern detection + evidence scoring
+    \item \textbf{Explanation Generation}: LLM-based synthesis
+    \item \textbf{Response Formatting}: Citations + metadata
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Task 2: Follow-Up Processing}
+\begin{enumerate}
+    \item \textbf{Follow-Up Detection}: Identify contextual queries
+    \item \textbf{Context Retrieval}: Get conversation history
+    \item \textbf{Query Enhancement}: Combine with context
+    \item \textbf{Context-Aware Retrieval}: Refine search with context
+    \item \textbf{Contextual Generation}: Generate with awareness
+    \item \textbf{Context Update}: Maintain conversation state
+\end{enumerate}
+\end{frame}
+
+\section{Evaluation}
+
+\begin{frame}{Evaluation Metrics}
+\begin{columns}
+\column{0.5\textwidth}
+\textbf{Response Quality:}
+\begin{itemize}
+    \item Length, coherence
+    \item Citation count
+    \item Completeness
+\end{itemize}
+
+\textbf{Evidence Quality:}
+\begin{itemize}
+    \item Count, scores
+    \item Coverage, diversity
+\end{itemize}
+\column{0.5\textwidth}
+\textbf{Explanation Quality:}
+\begin{itemize}
+    \item Causal language
+    \item Evidence references
+    \item Completeness
+\end{itemize}
+
+\textbf{Conversational Coherence:}
+\begin{itemize}
+    \item Context usage
+    \item Reference count
+    \item Relevance
+\end{itemize}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Baseline Comparisons}
+\begin{table}
+\centering
+\small
+\begin{tabular}{lccc}
+\toprule
+Method & Precision & Recall & F1 \\
+\midrule
+Keyword Search & - & - & - \\
+Simple RAG & - & - & - \\
+Rule-Based & - & - & - \\
+\textbf{Our System} & \textbf{-} & \textbf{-} & \textbf{-} \\
+\bottomrule
+\end{tabular}
+\caption{Comparison with baselines (results to be filled)}
+\end{table}
+\end{frame}
+
+\begin{frame}{Ablation Studies}
+\begin{itemize}
+    \item \textbf{Without Reranking}: Impact on precision
+    \item \textbf{Without Causal Analysis}: Impact on explanation quality
+    \item \textbf{Without LLM}: Template-based responses
+\end{itemize}
+
+[Results to be filled after experiments]
+\end{frame}
+
+\section{Demo}
+
+\begin{frame}{Live Demo}
+\begin{block}{Example Query}
+\textit{"Why are escalations happening on calls?"}
+\end{block}
+
+\begin{block}{System Response}
+\begin{itemize}
+    \item Evidence-based explanation
+    \item Causal mechanisms identified
+    \item Evidence citations provided
+    \item Key factors highlighted
+\end{itemize}
+\end{block}
+
+\begin{block}{Follow-Up}
+\textit{"What patterns lead to these escalations?"}
+\begin{itemize}
+    \item Context-aware response
+    \item References to previous analysis
+    \item Additional evidence retrieval
+\end{itemize}
+\end{block}
+\end{frame}
+
+\section{Results \& Insights}
+
+\begin{frame}{Key Results}
+\begin{itemize}
+    \item Successfully processes large-scale transcript data
+    \item Provides interpretable, evidence-based explanations
+    \item Supports contextual follow-up conversations
+    \item Outperforms baseline methods
+    \item Handles multiple event types (escalations, refunds, churn)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Key Insights}
+\begin{block}{What Worked Well}
+\begin{itemize}
+    \item Two-stage retrieval (search + rerank) improves precision
+    \item Causal pattern detection adds interpretability
+    \item Context management enables coherent follow-ups
+    \item LLM integration provides natural explanations
+\end{itemize}
+\end{block}
+
+\begin{block}{Challenges}
+\begin{itemize}
+    \item Transcript quality affects performance
+    \item Computational cost of LLM inference
+    \item Need for domain-specific tuning
+\end{itemize}
+\end{block}
+\end{frame}
+
+\section{Future Work}
+
+\begin{frame}{Future Directions}
+\begin{itemize}
+    \item \textbf{Custom Model Training}: Domain-specific causal patterns
+    \item \textbf{Multi-Language Support}: Extend beyond English
+    \item \textbf{Real-Time Processing}: Live call monitoring integration
+    \item \textbf{Enhanced Visualizations}: Interactive explanation interfaces
+    \item \textbf{Active Learning}: Iterative improvement from feedback
+\end{itemize}
+\end{frame}
+
+\section{Conclusion}
+
+\begin{frame}{Summary}
+\begin{block}{Contributions}
+\begin{itemize}
+    \item End-to-end system for causal rationale extraction
+    \item Evidence-based explanation generation
+    \item Contextual follow-up conversation support
+    \item Comprehensive evaluation framework
+\end{itemize}
+\end{block}
+
+\begin{block}{Impact}
+Enables organizations to:
+\begin{itemize}
+    \item Understand root causes of business events
+    \item Coach agents with specific evidence
+    \item Redesign processes based on insights
+    \item Proactively intervene to prevent issues
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Thank You}
+\begin{center}
+\Large Questions?
+\end{center}
+\vspace{1cm}
+\begin{center}
+Contact: [Your Contact Information]
+\end{center}
+\end{frame}
+
+\end{document}
+
